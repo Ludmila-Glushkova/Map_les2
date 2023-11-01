@@ -5,11 +5,21 @@
 #include <mutex>
 #include <chrono>
 #include <vector>
+#include <random>
 #include "ConsParam.h"
+
 
 using namespace std::chrono_literals;
 
 std::mutex m;
+
+std::size_t get_val()
+{
+    std::random_device r;
+    std::mt19937 mt{ r() };
+    std::uniform_int_distribution<std::size_t> result{ 100, 800 };
+    return result(mt);
+}
 
 void ProgressBar(int threads, int ind, int wid) {
 
@@ -22,7 +32,7 @@ void ProgressBar(int threads, int ind, int wid) {
 
     auto start = std::chrono::high_resolution_clock::now();
     for (int j = 16; j < wid + 16; ++j) {
-        std::this_thread::sleep_for(400ms);
+        std::this_thread::sleep_for(std::chrono::milliseconds(get_val()));
         m.lock();
         consoleParameter::setPos(j, ind);
         std::cout << "-";
@@ -50,11 +60,11 @@ void create(int threads, int wid) {
     {
         t[i].join();
     }
+    consoleParameter::setPos(1, 11);
 }
 
 int main()
 {
-
     const int threads = 10;
     const int wid = 20;
     create(threads, wid);

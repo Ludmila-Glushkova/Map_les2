@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ProgBar.h"
 #include "ConsParam.h"
-#include <thread>
+
 
 using namespace std::chrono_literals;
 
@@ -15,7 +15,7 @@ void ProgBar::Start() {
 	{
 		consoleParameter::setPos(i, Y);
 		std::cout << sym;
-		std::this_thread::sleep_for(400ms);
+		std::this_thread::sleep_for(std::chrono::milliseconds(400));
 	}
 }
 HANDLE consoleParameter::hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
